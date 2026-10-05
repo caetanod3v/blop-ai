@@ -1,0 +1,252 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, Arial, sans-serif;
+  background: #0b0b0c;
+  color: #f5f5f5;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+/* =========================
+   APP
+========================= */
+
+.app {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: #0b0b0c;
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar {
+  width: 260px;
+  height: 100vh;
+  flex-shrink: 0;
+
+  padding: 20px 14px;
+
+  background: #111111;
+  border-right: 1px solid #2a2a2a;
+
+  overflow-y: auto;
+}
+
+.sidebar-header {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.sidebar-header h1 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.new-chat-button {
+  width: 100%;
+  padding: 10px 12px;
+
+  border: 1px solid #333;
+  border-radius: 8px;
+
+  background: #1c1c1c;
+  color: white;
+
+  cursor: pointer;
+}
+
+.new-chat-button:hover {
+  background: #252525;
+}
+
+.new-chat-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* =========================
+   CONVERSAS
+========================= */
+
+.conversation-title {
+  margin-bottom: 10px;
+
+  font-size: 12px;
+  color: #777;
+  text-transform: uppercase;
+}
+
+.conversation-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.conversation-item {
+  width: 100%;
+
+  padding: 10px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: transparent;
+  color: #ddd;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.conversation-item:hover {
+  background: #1e1e1e;
+}
+
+.conversation-item:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* =========================
+   CHAT CONTAINER
+========================= */
+
+.chat-container {
+  flex: 1;
+  min-width: 0;
+  height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.chat-container .header {
+  flex-shrink: 0;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  padding: 0 28px;
+  border-bottom: 1px solid #222;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.input-area {
+  flex-shrink: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 16px 28px 24px;
+  border-top: 1px solid #1d1d1f;
+  background: #0b0b0c;
+}
+
+.input-box {
+  width: min(900px, 100%);
+  border: 1px solid #303033;
+  border-radius: 16px;
+  background: #151516;
+  overflow: hidden;
+  transition: border-color 0.2s ease;
+}
+
+.input-box:focus-within {
+  border-color: #48484c;
+}
+
+.input-box input {
+  width: 100%;
+  border: none;
+  outline: none;
+  padding: 16px 18px 8px;
+  background: transparent;
+  color: white;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.input-box input::placeholder {
+  color: #666;
+}
+
+.input-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px 10px 12px;
+}
+
+.model-selector {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  border-radius: 8px;
+  padding: 7px 9px;
+  background: transparent;
+  color: #aaa;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.model-selector:hover {
+  background: #222224;
+  color: #ddd;
+}
+
+.model-selector span {
+  font-size: 14px;
+  color: #777;
+}
+
+.send-button {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: white;
+  color: black;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.send-button:hover:not(:disabled) {
+  background: #ddd;
+}
+
+.send-button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
