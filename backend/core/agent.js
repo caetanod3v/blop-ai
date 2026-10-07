@@ -13,6 +13,26 @@ export class Agent {
     this.tools = {
       calculator,
     };
+
+    this.toolDefinitions = [
+      {
+        type: "function",
+        function: {
+          name: "calculator",
+          description: "Calcula expressões matemáticas.",
+          parameters: {
+            type: "object",
+            properties: {
+              expression: {
+                type: "string",
+                description: "A expressão matemática a ser calculada.",
+              },
+            },
+            required: ["expression"],
+          },
+        },
+      },
+    ];
   }
 
   /**
@@ -46,6 +66,7 @@ export class Agent {
           content: task.message,
         },
       ],
+      tools: this.toolDefinitions,
     });
 
     return response.choices[0]?.message?.content || "";
