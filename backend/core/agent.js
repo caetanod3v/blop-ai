@@ -7,11 +7,13 @@
 
 import { client } from "../index.js";
 import { calculator } from "./tools/calculator.js";
+import { getCurrentDate } from "./tools/date.js";
 
 export class Agent {
   constructor() {
     this.tools = {
       calculator,
+      getCurrentDate,
     };
 
     this.toolDefinitions = [
@@ -29,6 +31,17 @@ export class Agent {
               },
             },
             required: ["expression"],
+          },
+        },
+      },
+      {
+        type: "function",
+        function: {
+          name: "getCurrentDate",
+          description: "Retorna a data atual no formato YYYY-MM-DD.",
+          parameters: {
+            type: "object",
+            properties: {},
           },
         },
       },
