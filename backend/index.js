@@ -285,7 +285,7 @@ app.post("/api/conversations/:id/select", (req, res) => {
 
 app.post("/api/chat", async (req, res) => {
   try {
-    const { message } = req.body;
+    const { message, model } = req.body;
     const isFirstMessage =
   historico.filter((item) => item.role === "user").length === 0;
 
@@ -324,7 +324,7 @@ Regras:
 };
 
     const stream = await client.chat.completions.create({
-      model: "openai/gpt-oss-20b",
+      model: model || "openai/gpt-oss-20b",
       messages: [systemPrompt, ...historico],
       stream: true,
     });

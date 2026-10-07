@@ -6,6 +6,10 @@ function App() {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [conversations, setConversations] = useState({});
+  const [modelMenuOpen, setModelMenuOpen] = useState(false);
+  const [selectedModel, setSelectedModel] = useState(
+  "openai/gpt-oss-20b"
+);
   useEffect(() => {
   console.log("🧠 MESSAGES ATUALIZADAS:", messages);
 }, [messages]);
@@ -148,6 +152,7 @@ function App() {
         },
         body: JSON.stringify({
           message: userMessage,
+          model: selectedModel,
         }),
       }
     );
@@ -404,23 +409,76 @@ function App() {
     />
 
     <div className="input-bottom">
-      <button
-        type="button"
-        className="model-selector"
-      >
-        GPT-OSS
-        <span>⌄</span>
-      </button>
 
-      <button
-        type="submit"
-        className="send-button"
-        disabled={loading || !message.trim()}
-        aria-label="Enviar mensagem"
-      >
-        ↑
-      </button>
-    </div>
+  <div className="model-selector-wrapper">
+    <button
+      type="button"
+      className="model-selector"
+      onClick={() =>
+        setModelMenuOpen((current) => !current)
+      }
+    >
+      {selectedModel === "openai/gpt-oss-20b"
+        ? "GPT-OSS 20B"
+        : "GPT-OSS 120B"}
+      <span>⌄</span>
+    </button>
+
+    {modelMenuOpen && (
+  <div className="model-menu">
+
+    <button
+      type="button"
+      className={`model-option ${
+        selectedModel === "openai/gpt-oss-20b"
+          ? "active"
+          : ""
+      }`}
+      onClick={() => {
+        setSelectedModel("openai/gpt-oss-20b");
+        setModelMenuOpen(false);
+      }}
+    >
+      <span>GPT-OSS 20B</span>
+
+      {selectedModel === "openai/gpt-oss-20b" && (
+        <span>✓</span>
+      )}
+    </button>
+
+    <button
+      type="button"
+      className={`model-option ${
+        selectedModel === "openai/gpt-oss-120b"
+          ? "active"
+          : ""
+      }`}
+      onClick={() => {
+        setSelectedModel("openai/gpt-oss-120b");
+        setModelMenuOpen(false);
+      }}
+    >
+      <span>GPT-OSS 120B</span>
+
+      {selectedModel === "openai/gpt-oss-120b" && (
+        <span>✓</span>
+      )}
+    </button>
+
+  </div>
+)}
+  </div>
+
+  <button
+    type="submit"
+    className="send-button"
+    disabled={loading || !message.trim()}
+    aria-label="Enviar mensagem"
+  >
+    ↑
+  </button>
+
+</div>
   </div>
 </form>
       </section>
