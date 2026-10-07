@@ -2,9 +2,12 @@
  * Calculator Tool — Avalia expressões matemáticas simples com segurança.
  *
  * Suporta operações aritméticas básicas (+, -, *, /, %, parênteses e números decimais).
+ * Recebe um objeto de argumentos padronizado: { expression }.
  */
 
-export function calculator(expression) {
+export function calculator(args = {}) {
+  const expression = typeof args === "string" ? args : args?.expression;
+
   if (typeof expression !== "string") {
     throw new Error("A expressão deve ser uma string.");
   }
@@ -25,4 +28,3 @@ export function calculator(expression) {
 
   return result;
 }
-

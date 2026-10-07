@@ -73,13 +73,7 @@ export class Agent {
         ? JSON.parse(toolCall.function.arguments)
         : {};
 
-      let toolResult;
-      const paramKeys = Object.keys(args);
-      if (paramKeys.length === 1 && typeof toolFn === "function" && toolFn.length === 1) {
-        toolResult = await toolFn(args[paramKeys[0]]);
-      } else {
-        toolResult = await toolFn(args);
-      }
+      const toolResult = await toolFn(args);
 
       messages.push({
         role: "tool",
