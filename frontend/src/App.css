@@ -137,6 +137,21 @@ input {
   overflow: hidden;
 }
 
+.chat {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow-y: auto;
+  padding: 24px 28px;
+}
+
+.welcome {
+  text-align: center;
+  color: #888;
+}
+
 /* =========================
    HEADER
 ========================= */
@@ -172,7 +187,6 @@ input {
   border: 1px solid #303033;
   border-radius: 16px;
   background: #151516;
-  overflow: hidden;
   transition: border-color 0.2s ease;
 }
 
