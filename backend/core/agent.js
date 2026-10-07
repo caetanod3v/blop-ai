@@ -1,8 +1,8 @@
 /**
  * Agent — Classe base para agentes especializados do Blop.
  *
- * Utiliza o cliente OpenAI/Groq configurado na aplicação
- * e possui suporte a registro e execução de tools.
+ * Utiliza o cliente OpenAI/Groq configurado na aplicação,
+ * com suporte a registro de tools e loop de tool calling.
  */
 
 import { client } from "../index.js";
@@ -41,9 +41,9 @@ export class Agent {
    * @param {object} task - A tarefa a ser executada.
    * @param {string} [task.message] - A mensagem do usuário (quando não usa tool).
    * @param {string} [task.model] - O modelo selecionado.
-   * @param {string} [task.tool] - Nome da tool a ser executada.
-   * @param {any} [task.input] - Parâmetro de entrada para a tool.
-   * @returns {Promise<any>} O conteúdo da resposta da IA ou retorno da tool.
+   * @param {string} [task.tool] - Nome da tool a ser executada diretamente.
+   * @param {any} [task.input] - Parâmetro de entrada para execução direta da tool.
+   * @returns {Promise<any>} O conteúdo da resposta final da IA ou retorno da tool.
    */
   async run(task) {
     if (task?.tool) {
@@ -58,17 +58,59 @@ export class Agent {
       return selectedTool(task.input);
     }
 
+    const model = task?.model || "openai/gpt-oss-20b";
+    const messages = [
+      {
+        role: "user",
+        content: task.message,
+      },
+    ];
+
     const response = await client.chat.completions.create({
-      model: task?.model || "openai/gpt-oss-20b",
-      messages: [
-        {
-          role: "user",
-          content: task.message,
-        },
-      ],
+      model,
+      messages,
       tools: this.toolDefinitions,
     });
 
-    return response.choices[0]?.message?.content || "";
+    const assistantMessage = response.choices[0]?.message;
+
+    if (!assistantMessage?.tool_calls || assistantMessage.tool_calls.length === 0) {
+      return assistantMessage?.content || "";
+    }
+
+    messages.push(assistantMessage);
+
+    for (const toolCall of assistantMessage.tool_calls) {
+      const toolName = toolCall.function?.name;
+      const toolFn = this.tools[toolName];
+
+      if (!toolFn) {
+        throw new Error(
+          `Tool desconhecida chamada pelo modelo: "${toolName}". Tools disponíveis: ${Object.keys(this.tools).join(", ")}`
+        );
+      }
+
+      const args = toolCall.function?.arguments
+        ? JSON.parse(toolCall.function.arguments)
+        : {};
+
+      const toolResult =
+        toolName === "calculator"
+          ? toolFn(args.expression)
+          : toolFn(args);
+
+      messages.push({
+        role: "tool",
+        tool_call_id: toolCall.id,
+        content: JSON.stringify(toolResult),
+      });
+    }
+
+    const followUpResponse = await client.chat.completions.create({
+      model,
+      messages,
+    });
+
+    return followUpResponse.choices[0]?.message?.content || "";
   }
 }
