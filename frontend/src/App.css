@@ -261,18 +261,23 @@ input {
   border-color: #48484c;
 }
 
-.input-box input {
+.input-box textarea {
   width: 100%;
   border: none;
   outline: none;
-  padding: 16px 18px 8px;
+  padding: 14px 18px 4px;
   background: transparent;
   color: white;
+  font-family: inherit;
   font-size: 15px;
   line-height: 1.5;
+  resize: none;
+  max-height: 200px;
+  overflow-y: auto;
+  display: block;
 }
 
-.input-box input::placeholder {
+.input-box textarea::placeholder {
   color: #666;
 }
 

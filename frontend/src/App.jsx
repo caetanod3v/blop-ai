@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./App.css";
 
 function App() {
@@ -10,6 +10,15 @@ function App() {
   const [selectedModel, setSelectedModel] = useState(
   "openai/gpt-oss-20b"
 );
+  const textareaRef = useRef(null);
+
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+      textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 200)}px`;
+    }
+  }, [message]);
+
   useEffect(() => {
   console.log("🧠 MESSAGES ATUALIZADAS:", messages);
 }, [messages]);
@@ -401,11 +410,19 @@ function App() {
 
         <form className="input-area" onSubmit={sendMessage}>
   <div className="input-box">
-    <input
+    <textarea
+      ref={textareaRef}
       value={message}
       onChange={(event) => setMessage(event.target.value)}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" && !event.shiftKey) {
+          event.preventDefault();
+          sendMessage(event);
+        }
+      }}
       placeholder="Digite sua mensagem..."
       disabled={loading}
+      rows={1}
     />
 
     <div className="input-bottom">
