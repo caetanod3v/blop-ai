@@ -4,13 +4,19 @@
  * Responsável por receber tarefas do usuário, analisar a intenção,
  * rotear para os agentes apropriados e consolidar as respostas.
  *
- * Status: Estrutura inicial (scaffold).
+ * Status: Conectado ao Agent base.
  * Ainda não integrado ao /api/chat.
  */
 
+import { Agent } from "./agent.js";
+
 export class Orchestrator {
+  constructor() {
+    this.agent = new Agent();
+  }
+
   /**
-   * Executa uma tarefa.
+   * Executa uma tarefa delegando ao Agent.
    *
    * @param {object} task - A tarefa a ser executada.
    * @param {string} task.message - A mensagem do usuário.
@@ -18,7 +24,7 @@ export class Orchestrator {
    * @returns {object} O resultado da execução.
    */
   async run(task) {
-    return task;
+    const result = await this.agent.run(task);
+    return result;
   }
 }
-
