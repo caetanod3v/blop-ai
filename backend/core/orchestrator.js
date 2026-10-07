@@ -4,16 +4,18 @@
  * Responsável por receber tarefas do usuário, analisar a intenção,
  * rotear para os agentes apropriados e consolidar as respostas.
  *
- * Status: Conectado ao Agent base.
+ * Status: Conectado ao Agent base e CodeAgent.
  * Ainda não integrado ao /api/chat.
  */
 
 import { Agent } from "./agent.js";
+import { CodeAgent } from "./agents/code-agent.js";
 
 export class Orchestrator {
   constructor() {
     this.agents = {
       default: new Agent(),
+      code: new CodeAgent(),
     };
   }
 
