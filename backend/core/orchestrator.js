@@ -12,19 +12,29 @@ import { Agent } from "./agent.js";
 
 export class Orchestrator {
   constructor() {
-    this.agent = new Agent();
+    this.agents = {
+      default: new Agent(),
+    };
   }
 
   /**
-   * Executa uma tarefa delegando ao Agent.
+   * Executa uma tarefa delegando ao Agent apropriado.
    *
    * @param {object} task - A tarefa a ser executada.
    * @param {string} task.message - A mensagem do usuário.
    * @param {string} [task.model] - O modelo selecionado.
-   * @returns {object} O resultado da execução.
+   * @param {string} [task.agent="default"] - Identificador do agente.
+   * @returns {Promise<any>} O resultado da execução.
    */
   async run(task) {
-    const result = await this.agent.run(task);
+    const agentName = task?.agent || "default";
+    const selectedAgent = this.agents[agentName];
+
+    if (!selectedAgent) {
+      throw new Error(`Agente desconhecido: "${agentName}". Agentes disponíveis: ${Object.keys(this.agents).join(", ")}`);
+    }
+
+    const result = await selectedAgent.run(task);
     return result;
   }
 }
