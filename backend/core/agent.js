@@ -38,12 +38,12 @@ export class Agent {
     }
 
     const model = task?.model || "openai/gpt-oss-20b";
-    const messages = [
-      {
-        role: "user",
-        content: task.message,
-      },
-    ];
+    const messages = task.messages || [
+  {
+    role: "user",
+    content: task.message,
+  },
+];
 
     const response = await client.chat.completions.create({
       model,

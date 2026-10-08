@@ -3,6 +3,7 @@ import cors from "cors";
 import OpenAI from "openai";
 import "dotenv/config";
 import fs from "fs";
+import { Agent } from "./core/agent.js";
 
 const app = express();
 
@@ -14,6 +15,7 @@ export const client = new OpenAI({
   baseURL: "https://api.groq.com/openai/v1",
 });
 
+const agent = new Agent();
 const MEMORY_FILE = "memory.json";
 const USER_MEMORY_FILE = "user-memory.json";
 const CONVERSATIONS_FILE = "conversations.json";
@@ -323,36 +325,17 @@ Regras:
 `,
 };
 
-    const stream = await client.chat.completions.create({
-      model: model || "openai/gpt-oss-20b",
-      messages: [systemPrompt, ...historico],
-      stream: true,
-    });
+    const fullReply = await agent.run({
+  model: model || "openai/gpt-oss-20b",
+  messages: [systemPrompt, ...historico],
+});
 
-    res.setHeader(
-      "Content-Type",
-      "text/plain; charset=utf-8"
-    );
+res.setHeader(
+  "Content-Type",
+  "text/plain; charset=utf-8"
+);
 
-    res.setHeader("Cache-Control", "no-cache");
-    res.setHeader("Connection", "keep-alive");
-
-    let fullReply = "";
-
-    for await (const chunk of stream) {
-      const content =
-        chunk.choices[0]?.delta?.content || "";
-
-      if (content) {
-        fullReply += content;
-        res.write(content);
-      }
-    }
-
-    historico.push({
-      role: "assistant",
-      content: fullReply,
-    });
+res.write(fullReply);
 
 salvarMemoria();
 
