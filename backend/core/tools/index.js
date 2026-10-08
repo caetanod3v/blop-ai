@@ -7,11 +7,14 @@
 import { calculator } from "./calculator.js";
 import { getCurrentDate } from "./date.js";
 import { readFile } from "./read-file.js";
+import { listFiles } from "./list-files.js";
+
 
 export const tools = {
   calculator,
   getCurrentDate,
   readFile,
+  listFiles,
 };
 
 export const toolDefinitions = [
@@ -60,6 +63,22 @@ export const toolDefinitions = [
       },
     },
   },
+  {
+  type: "function",
+  function: {
+    name: "listFiles",
+    description: "Lista arquivos e pastas dentro do workspace do Blop.",
+    parameters: {
+      type: "object",
+      properties: {
+        path: {
+          type: "string",
+          description: "Caminho relativo da pasta dentro do workspace.",
+        },
+      },
+    },
+  },
+},
 ];
 
 
